@@ -44,7 +44,7 @@ class _PainterState extends State<Painter> {
         builder: (context) => CustomPaint(
               willChange: true,
               painter: new _PainterPainter(
-                  widget.painterController._pathHistory,
+                  context, widget.painterController._pathHistory,
                   repaint: widget.painterController),
             ));
     child = new ClipRect(child: child);
@@ -85,12 +85,14 @@ class _PainterState extends State<Painter> {
 
 class _PainterPainter extends CustomPainter {
   final _PathHistory _path;
-
-  _PainterPainter(this._path, {Listenable? repaint}) : super(repaint: repaint);
+  final context;
+  _PainterPainter(this.context, this._path, {Listenable? repaint})
+      : super(repaint: repaint);
 
   @override
   void paint(Canvas canvas, Size size) {
-    _path.draw(canvas, size);
+    var myCanvas = TouchyCanvas(context, canvas);
+    _path.draw(myCanvas, size);
   }
 
   @override
@@ -152,7 +154,7 @@ class _PathHistory {
     _inDrag = false;
   }
 
-  void draw(Canvas canvas, Size size) {
+  void draw(canvas, Size size) {
     canvas.saveLayer(Offset.zero & size, Paint());
     for (MapEntry<Path, Paint> path in _paths) {
       Paint p = path.value;
