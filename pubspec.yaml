@@ -10,3 +10,4 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  touchable: ^1.0.0

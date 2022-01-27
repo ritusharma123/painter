@@ -7,6 +7,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/widgets.dart' hide Image;
+import 'package:touchable/touchable.dart';
 
 /// A very simple widget that supports drawing using touch.
 class Painter extends StatefulWidget {
@@ -39,11 +40,13 @@ class _PainterState extends State<Painter> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = new CustomPaint(
-      willChange: true,
-      painter: new _PainterPainter(widget.painterController._pathHistory,
-          repaint: widget.painterController),
-    );
+    Widget child = CanvasTouchDetector(
+        builder: (context) => CustomPaint(
+              willChange: true,
+              painter: new _PainterPainter(
+                  widget.painterController._pathHistory,
+                  repaint: widget.painterController),
+            ));
     child = new ClipRect(child: child);
     if (!_finished) {
       child = new GestureDetector(
